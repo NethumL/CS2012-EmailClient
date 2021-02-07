@@ -1,0 +1,9 @@
+target/
+.settings/
+.DS_Store
+
+emails/
+clientList.txt
+
+*.docx
+*.pdf

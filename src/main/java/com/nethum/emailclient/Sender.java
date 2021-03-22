@@ -16,11 +16,11 @@ class Sender {
 
         // Preparing to send emails
         properties = new Properties();
-        properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.port", "465");
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.socketFactory.port", "465");
-        properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        properties.setProperty("mail.smtp.host", "smtp.gmail.com");
+        properties.setProperty("mail.smtp.port", "465");
+        properties.setProperty("mail.smtp.auth", "true");
+        properties.setProperty("mail.smtp.socketFactory.port", "465");
+        properties.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 
         session = Session.getInstance(properties, new Authenticator() {
             @Override

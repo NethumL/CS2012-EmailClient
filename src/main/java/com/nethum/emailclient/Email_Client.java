@@ -10,7 +10,7 @@ public class Email_Client {
     private static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("uuuu/MM/dd");
 
     public static void main(String[] args) {
-        // Email needs to passed as the first commandline argument
+        // Email needs to be passed as the first commandline argument
         String email = args[0];
 
         // Uses the java.io.Console class to securely get the password from the shell

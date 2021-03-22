@@ -5,13 +5,15 @@ import java.util.HashMap;
 
 public class IO {
     public static void writeToFile(String text, File file) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
-        if (!newLineExists(file)) {
+        synchronized (file.getCanonicalPath().intern()) {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
+            if (!newLineExists(file)) {
+                writer.newLine();
+            }
+            writer.write(text);
             writer.newLine();
+            writer.close();
         }
-        writer.write(text);
-        writer.newLine();
-        writer.close();
     }
 
     private static boolean newLineExists(File file) {

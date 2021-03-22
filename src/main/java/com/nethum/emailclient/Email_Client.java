@@ -100,7 +100,7 @@ public class Email_Client {
                         continue;
                     }
                     date = LocalDate.parse(input, dateTimeFormatter);
-                    emailClient.printEmailsOnDate(date);
+                    emailClient.printSentEmailsOnDate(date);
                     break;
                 case 5:
                     // Print number of recipients in email client

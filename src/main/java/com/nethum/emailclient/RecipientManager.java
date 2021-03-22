@@ -1,6 +1,7 @@
 package com.nethum.emailclient;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -30,43 +31,7 @@ class RecipientManager {
         generateBirthdayList();
     }
 
-    private void loadRecipients() {
-        File clientListFile = new File("clientList.txt");
-        try {
-            // Creates file if not exists
-            if (!clientListFile.createNewFile()) {
-                try (BufferedReader reader = new BufferedReader(new FileReader(clientListFile))) {
-                    String line;
-                    while (true) {
-                        line = reader.readLine();
-                        if (line == null) break;  // Stops reading at end of file
-                        line = line.strip();
-                        if (line.equals("")) continue; // Skips blank lines
-
-                        Recipient recipient = getRecipientFromString(line);
-                        if (recipient == null) continue;
-                        recipients.put(recipient.getEmail(), recipient);
-                    }
-                } catch (IOException e) {
-                    System.out.println("Error in reading clientList.txt");
-                    System.exit(1);
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Error in checking clientList.txt");
-            System.exit(1);
-        }
-    }
-
-    private void generateBirthdayList() {
-        for (Recipient recipient : recipients.values()) {
-            if (recipient instanceof Greetable) {
-                greetableArrayList.add((Greetable) recipient);
-            }
-        }
-    }
-
-    public Recipient getRecipientFromString(String recipientText) {
+    public static Recipient getRecipientFromString(String recipientText) {
         // Parsing recipient text
         Recipient recipient;
         try {
@@ -103,6 +68,19 @@ class RecipientManager {
         return recipient;
     }
 
+    private void loadRecipients() {
+        File clientListFile = new File("clientList.txt");
+        recipients.putAll(IO.readRecipientListFromFile(clientListFile));
+    }
+
+    private void generateBirthdayList() {
+        for (Recipient recipient : recipients.values()) {
+            if (recipient instanceof Greetable) {
+                greetableArrayList.add((Greetable) recipient);
+            }
+        }
+    }
+
     public void addRecipient(String recipientText) {
         Recipient recipient = getRecipientFromString(recipientText);
         recipients.put(recipient.getEmail(), recipient);
@@ -114,12 +92,8 @@ class RecipientManager {
 
     public void saveRecipientToFile(Recipient recipient) {
         File clientListFile = new File("clientList.txt");
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(clientListFile, true))) {
-            if (!newLineExists(clientListFile)) {
-                writer.newLine();
-            }
-            writer.write(recipient.toString());
-            writer.newLine();
+        try {
+            IO.writeToFile(recipient.toString(), clientListFile);
             System.out.println("Recipient saved\n");
         } catch (IOException e) {
             System.out.println("Error in saving recipient to clientList.txt");
@@ -159,23 +133,6 @@ class RecipientManager {
 
     public HashMap<String, Recipient> getRecipients() {
         return recipients;
-    }
-
-    private boolean newLineExists(File file) {
-        try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
-            long fileLength = randomAccessFile.length() - 1;
-            if (fileLength < 0) {
-                return true;
-            }
-            randomAccessFile.seek(fileLength);
-            byte readByte = randomAccessFile.readByte();
-            if (readByte == 0xA || readByte == 0xD) {
-                return true;
-            }
-        } catch (IOException e) {
-            System.out.println("Error in checking " + file.getName());
-        }
-        return false;
     }
 }
 

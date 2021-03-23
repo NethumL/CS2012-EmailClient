@@ -1,5 +1,7 @@
 package com.nethum.emailclient;
 
+import javax.mail.Authenticator;
+import javax.mail.PasswordAuthentication;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -8,11 +10,20 @@ public class EmailHandler {
     private ReceiveThread receiveThread;
 
     public EmailHandler(String email, String password) {
-        sender = new Sender(email, password);
+        Authenticator authenticator = new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(email, password);
+            }
+        };
+        sender = new Sender(email, authenticator);
 
         MyBlockingQueue queue = new MyBlockingQueue(20);
 
-        receiveThread = new ReceiveThread(queue, new EmailStatPrinter(), new EmailStatRecorder(), email, password);
+        receiveThread = new ReceiveThread(queue, email, authenticator);
+        receiveThread.attach(new EmailStatPrinter());
+        receiveThread.attach(new EmailStatRecorder());
+
         SaveThread saveThread = new SaveThread(queue);
 
         // Start threads

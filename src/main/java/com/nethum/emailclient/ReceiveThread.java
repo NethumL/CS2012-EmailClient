@@ -4,44 +4,52 @@ import javax.mail.*;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.search.FlagTerm;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Properties;
 
 public class ReceiveThread implements Runnable {
-    private final Observer[] observers;
+    private final ArrayList<Observer> observers;
     private final MyBlockingQueue queue;
-    private final Properties properties;
-    private final String email;
-    private final String password;
+    private final String userEmailAddress;
     private volatile boolean isRunning;
+    private Store store;
 
-    public ReceiveThread(MyBlockingQueue queue, Observer observer1, Observer observer2, String email, String password) {
+    public ReceiveThread(MyBlockingQueue queue, String userEmailAddress, Authenticator authenticator) {
         this.queue = queue;
-        observers = new Observer[2];
-        observers[0] = observer1;
-        observers[1] = observer2;
+        observers = new ArrayList<>();
         isRunning = true;
-        this.email = email;
-        this.password = password;
+        this.userEmailAddress = userEmailAddress;
 
-        properties = new Properties();
+        Properties properties = new Properties();
 
         properties.setProperty("mail.store.protocol", "imaps");
         properties.setProperty("mail.imaps.host", "imap.gmail.com");
         properties.setProperty("mail.imaps.port", "993");
+
+        Session session = Session.getInstance(properties, authenticator);
+        try {
+            store = session.getStore("imaps");
+        } catch (NoSuchProviderException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    public void attach(Observer observer) {
+        observers.add(observer);
     }
 
     public void notifyAllObservers(int number) {
-        observers[0].update(number);
-        observers[1].update(number);
+        for (Observer observer : observers) {
+            observer.update(number);
+        }
     }
 
     @Override
     public void run() {
         while (isRunning) {
             try {
-                Session session = Session.getDefaultInstance(properties, null);
-                Store store = session.getStore("imaps");
-                store.connect(email, password);
+                store.connect();
 
                 Folder inbox = store.getFolder("inbox");
                 inbox.open(Folder.READ_WRITE);

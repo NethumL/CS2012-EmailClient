@@ -9,6 +9,7 @@ import java.util.HashMap;
 class RecipientManager {
     private ArrayList<Greetable> greetableArrayList;
     private HashMap<String, Recipient> recipients;
+    private File clientListFile;
 
     public RecipientManager() {
         this.greetableArrayList = new ArrayList<>();
@@ -17,6 +18,8 @@ class RecipientManager {
         // Make 'sent' and 'received' directories to serialize emails
         IO.createDirectory("sent");
         IO.createDirectory("received");
+
+        clientListFile = new File("clientList.txt");
 
         loadRecipients();
         generateBirthdayList();
@@ -60,7 +63,6 @@ class RecipientManager {
     }
 
     private void loadRecipients() {
-        File clientListFile = new File("clientList.txt");
         recipients.putAll(IO.readRecipientListFromFile(clientListFile));
     }
 
@@ -82,7 +84,6 @@ class RecipientManager {
     }
 
     public void saveRecipientToFile(Recipient recipient) {
-        File clientListFile = new File("clientList.txt");
         try {
             IO.writeToFile(recipient.toString(), clientListFile);
             System.out.println("Recipient saved\n");

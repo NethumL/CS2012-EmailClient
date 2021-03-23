@@ -16,7 +16,7 @@ public class ReceiveThread implements Runnable {
 
     public ReceiveThread(MyBlockingQueue queue, String userEmailAddress, Authenticator authenticator) {
         this.queue = queue;
-        observers = new ArrayList<>();
+        observers = new ArrayList<>(2);
         isRunning = true;
         this.userEmailAddress = userEmailAddress;
 

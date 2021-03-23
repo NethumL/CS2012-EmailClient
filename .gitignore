@@ -5,6 +5,7 @@ target/
 sent/
 received/
 clientList.txt
+notifications.txt
 
 *.docx
 *.pdf

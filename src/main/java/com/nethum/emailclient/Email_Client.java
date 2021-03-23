@@ -51,7 +51,7 @@ public class Email_Client {
                 case 1:
                     // Add new recipient
                     scanner.nextLine();
-                    System.out.println("Enter in the one of the following formats:");
+                    System.out.println("Enter the recipient details in one of the following formats:");
                     System.out.println("Official: <name>,<email>,<designation>");
                     System.out.println("Office_friend: <name>,<email>,<designation>,<birthday(uuuu/MM/dd)>");
                     System.out.println("Personal: <name>,<nickname>,<email>,<birthday(uuuu/MM/dd)>");

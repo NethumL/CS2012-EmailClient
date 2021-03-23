@@ -18,7 +18,7 @@ class EmailClient {
         recipientManager.addRecipient(input);
     }
 
-    public void sendBirthdayEmails() {
+    private void sendBirthdayEmails() {
         if (!EmailIO.haveEmailsSentToday()) {
             // If the serialized emails file doesn't exist for today,
             // then this is the first time that the client has been opened today

@@ -62,6 +62,9 @@ public class ReceiveThread implements Runnable {
                 }
                 inbox.close(true);
                 store.close();
+            } catch (AuthenticationFailedException e) {
+                System.out.println("Authentication failed");
+                System.exit(1);
             } catch (MessagingException e) {
                 e.printStackTrace();
             }

@@ -62,7 +62,7 @@ public class ReceiveThread implements Runnable {
                     for (int i = 0; i < messageCount; i++) {
                         Message message = messages[i];
                         Email email = new Email(
-                                message.getFrom()[0].toString(), message.getSubject(), getMessageText(message)
+                                message.getFrom()[0].toString(), userEmailAddress, message.getSubject(), getMessageText(message)
                         );
                         queue.enqueue(email);
                         message.setFlags(new Flags(Flags.Flag.SEEN), true);

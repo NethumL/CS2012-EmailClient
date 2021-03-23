@@ -4,14 +4,24 @@ import java.io.Serializable;
 
 class Email implements Serializable {
     private static final long serialVersionUID = 5576391924029736857L;
+    private String senderEmailAddress;
     private String recipientEmailAddress;
     private String subject;
     private String content;
 
-    public Email(String recipientEmailAddress, String subject, String content) {
+    public Email(String senderEmailAddress, String recipientEmailAddress, String subject, String content) {
+        this.senderEmailAddress = senderEmailAddress;
         this.recipientEmailAddress = recipientEmailAddress;
         this.subject = subject;
         this.content = content;
+    }
+
+    public String getSenderEmailAddress() {
+        return senderEmailAddress;
+    }
+
+    public void setSenderEmailAddress(String senderEmailAddress) {
+        this.senderEmailAddress = senderEmailAddress;
     }
 
     public String getRecipientEmailAddress() {

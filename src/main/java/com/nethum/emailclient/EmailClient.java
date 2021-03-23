@@ -27,11 +27,9 @@ class EmailClient {
                 if (greetableRecipient.hasBirthdayOnDate(LocalDate.now())) {
                     Recipient recipient = (Recipient) greetableRecipient;
                     System.out.println("Sending birthday wish to " + recipient.getName() + "...");
-                    Email birthdayEmail = new Email(
-                            recipient.getEmail(),
-                            "Birthday wish",
-                            greetableRecipient.generateBirthdayMessage());
-                    sendEmail(birthdayEmail);
+                    emailHandler.sendEmail(
+                            recipient.getEmail(), "Birthday wish", greetableRecipient.generateBirthdayMessage()
+                    );
                 }
             }
         }
@@ -40,12 +38,7 @@ class EmailClient {
     public void sendEmail(String emailText) {
         // Parse email text and send email
         String[] strings = emailText.split(",", 3);
-        Email email = new Email(strings[0], strings[1], strings[2]);
-        sendEmail(email);
-    }
-
-    public void sendEmail(Email email) {
-        emailHandler.sendEmail(email);
+        emailHandler.sendEmail(strings[0], strings[1], strings[2]);
     }
 
     public void printBornOnDate(LocalDate date) {

@@ -108,6 +108,7 @@ public class Email_Client {
                     break;
             }
         }
+        emailClient.end();
     }
 
     private static String getPasswordFromConsole() {

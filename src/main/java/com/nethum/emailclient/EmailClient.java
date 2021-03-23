@@ -69,4 +69,8 @@ class EmailClient {
     public void printRecipientCount() {
         recipientManager.printRecipientCount();
     }
+
+    public void end() {
+        emailHandler.end();
+    }
 }

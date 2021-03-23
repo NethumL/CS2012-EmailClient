@@ -66,6 +66,9 @@ public class ReceiveThread implements Runnable {
                 e.printStackTrace();
             }
         }
+        // Enqueue null to indicate that the email client is being closed
+        // and that there are no more emails to serialize
+        queue.enqueue(null);
     }
 
     private String getMessageText(Message message) {

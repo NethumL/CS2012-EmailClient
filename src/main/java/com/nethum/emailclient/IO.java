@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 
-public class IO {
+public final class IO {
     public static void writeToFile(String text, File file) throws IOException {
         synchronized (file.getCanonicalPath().intern()) {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));

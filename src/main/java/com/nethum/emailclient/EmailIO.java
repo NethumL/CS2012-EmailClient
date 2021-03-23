@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class EmailIO {
+public final class EmailIO {
     private static DateTimeFormatter emailFileNameFormatter = DateTimeFormatter.ofPattern("uuuu-MM-dd");
 
     public static boolean haveEmailsSentToday() {

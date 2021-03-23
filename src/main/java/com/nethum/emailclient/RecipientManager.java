@@ -2,9 +2,6 @@ package com.nethum.emailclient;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,15 +14,9 @@ class RecipientManager {
         this.greetableArrayList = new ArrayList<>();
         this.recipients = new HashMap<>();
 
-        // Make 'emails' directory to store serialized emails
-        try {
-            Files.createDirectories(Paths.get("emails"));
-        } catch (FileAlreadyExistsException ignored) {
-            // If emails directory already exists, ignore
-        } catch (IOException e) {
-            System.out.println("Error in creating emails directory");
-            System.exit(1);
-        }
+        // Make 'sent' and 'received' directories to serialize emails
+        IO.createDirectory("sent");
+        IO.createDirectory("received");
 
         loadRecipients();
         generateBirthdayList();

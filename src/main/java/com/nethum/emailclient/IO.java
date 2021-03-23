@@ -1,6 +1,9 @@
 package com.nethum.emailclient;
 
 import java.io.*;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 
 public class IO {
@@ -60,5 +63,16 @@ public class IO {
             System.exit(1);
         }
         return recipients;
+    }
+
+    public static void createDirectory(String directoryName) {
+        try {
+            Files.createDirectories(Paths.get(directoryName));
+        } catch (FileAlreadyExistsException ignored) {
+            // If directory already exists, ignore
+        } catch (IOException e) {
+            System.out.format("Error in created '%s' directory\n", directoryName);
+            System.exit(1);
+        }
     }
 }

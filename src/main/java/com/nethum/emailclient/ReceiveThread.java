@@ -29,7 +29,8 @@ public class ReceiveThread implements Runnable {
         Session session = Session.getInstance(properties, authenticator);
         try {
             store = session.getStore("imaps");
-        } catch (NoSuchProviderException e) {
+            store.connect();
+        } catch (MessagingException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -49,8 +50,6 @@ public class ReceiveThread implements Runnable {
     public void run() {
         while (isRunning) {
             try {
-                store.connect();
-
                 Folder inbox = store.getFolder("inbox");
                 inbox.open(Folder.READ_WRITE);
 
@@ -69,7 +68,6 @@ public class ReceiveThread implements Runnable {
                     }
                 }
                 inbox.close(true);
-                store.close();
             } catch (AuthenticationFailedException e) {
                 System.out.println("Authentication failed");
                 System.exit(1);
@@ -80,6 +78,11 @@ public class ReceiveThread implements Runnable {
         // Enqueue null to indicate that the email client is being closed
         // and that there are no more emails to serialize
         queue.enqueue(null);
+        try {
+            store.close();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 
     private String getMessageText(Message message) {
